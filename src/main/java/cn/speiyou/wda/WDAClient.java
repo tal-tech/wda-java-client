@@ -1,6 +1,8 @@
 package cn.speiyou.wda;
 
+import cn.speiyou.wda.custom.CustomApi;
 import cn.speiyou.wda.findelement.FindElementApi;
+import cn.speiyou.wda.orientation.OrientationApi;
 import cn.speiyou.wda.screenshot.ScreenshotApi;
 import cn.speiyou.wda.session.SessionApi;
 import com.alibaba.fastjson.JSON;
@@ -29,6 +31,10 @@ public class WDAClient {
     private ScreenshotApi screenshotApi;
     // 查找元素模块Api
     private FindElementApi findElementApi;
+    // 屏幕方向Api
+    private OrientationApi orientationApi;
+    // 自定义Api
+    private CustomApi customApi;
 
     public WDAClient(String host, int port) {
         this.host = host;
@@ -36,6 +42,8 @@ public class WDAClient {
         this.sessionApi = new SessionApi(this);
         this.screenshotApi = new ScreenshotApi(this);
         this.findElementApi = new FindElementApi(this);
+        this.orientationApi = new OrientationApi(this);
+        this.customApi = new CustomApi(this);
     }
 
     public String getBaseUrl() {
@@ -110,5 +118,13 @@ public class WDAClient {
 
     public FindElementApi getFindElementApi() {
         return findElementApi;
+    }
+
+    public OrientationApi getOrientationApi() {
+        return orientationApi;
+    }
+
+    public CustomApi getCustomApi() {
+        return customApi;
     }
 }

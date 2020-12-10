@@ -1,5 +1,7 @@
 import cn.speiyou.wda.BaseResponse;
 import cn.speiyou.wda.WDAClient;
+import cn.speiyou.wda.custom.res.ActiveAppInfo;
+import cn.speiyou.wda.custom.res.WDADeviceInfo;
 import cn.speiyou.wda.findelement.req.QueryInfo;
 import cn.speiyou.wda.findelement.req.QueryUsing;
 import cn.speiyou.wda.findelement.res.Element;
@@ -24,7 +26,7 @@ public class WDATest {
     @Before
     public void init() {
         this.client = new WDAClient("127.0.0.1", 8100);
-        this.currentSessionId = "BFF1035C-3592-4D39-BD1E-A93D5004E0BF1";
+        this.currentSessionId = "7D4F9933-BBB0-4315-B4FE-335249684C38";
     }
 
     @Test
@@ -48,12 +50,13 @@ public class WDATest {
         currentSessionId = res.getValue().getSessionId();
         assert StringUtils.isNotEmpty(res.getValue().getSessionId());
         System.out.println("创建Session成功：" + res.getValue().getSessionId());
+        assert res.isSuccess();
     }
 
     @Test
     public void launchApp() {
         BaseResponse res = this.client.getSessionApi().launchApp(currentSessionId, appleMapPkg);
-        assert res.getValue() == null;
+        assert res.isSuccess();
     }
 
     @Test
@@ -65,7 +68,7 @@ public class WDATest {
     @Test
     public void screenshot() {
         BaseResponse<String> res = this.client.getScreenshotApi().screenshot();
-        assert StringUtils.isNotEmpty(res.getValue());
+        assert res.isSuccess();
     }
 
     @Test
@@ -75,6 +78,62 @@ public class WDATest {
         queryInfo.setValue("XCUIElementTypeStaticText");
         BaseResponse<List<Element>> res = this.client.getFindElementApi().elements(currentSessionId, queryInfo);
         System.out.println("查找到元素：" + JSON.toJSONString(res));
+        assert res.isSuccess();
+    }
+
+    @Test
+    public void getOrientation() {
+        BaseResponse<String> res = this.client.getOrientationApi().getOrientation(currentSessionId);
+        System.out.println(JSON.toJSONString(res));
+        assert res.isSuccess();
+    }
+
+    @Test
+    public void deactiveApp() {
+        BaseResponse res = this.client.getCustomApi().deactiveApp(currentSessionId);
+        System.out.println(JSON.toJSONString(res));
+        assert res.isSuccess();
+    }
+
+    @Test
+    public void lock() {
+        BaseResponse res = this.client.getCustomApi().lock();
+        System.out.println(JSON.toJSONString(res));
+        assert res.isSuccess();
+    }
+
+    @Test
+    public void unlock() {
+        BaseResponse res = this.client.getCustomApi().unlock();
+        System.out.println(JSON.toJSONString(res));
+        assert res.isSuccess();
+    }
+
+    @Test
+    public void getActiveAppInfo() {
+        BaseResponse<ActiveAppInfo> res = this.client.getCustomApi().getActiveAppInfo();
+        System.out.println(JSON.toJSONString(res));
+        assert res.isSuccess();
+    }
+
+    @Test
+    public void getDeviceInfo() {
+        BaseResponse<WDADeviceInfo> res = this.client.getCustomApi().getDeviceInfo();
+        System.out.println(JSON.toJSONString(res));
+        assert res.isSuccess();
+    }
+
+    @Test
+    public void homeScreen() {
+        BaseResponse res = this.client.getCustomApi().homeScreen();
+        System.out.println(JSON.toJSONString(res));
+        assert res.isSuccess();
+    }
+
+    @Test
+    public void locked() {
+        BaseResponse<Boolean> res = this.client.getCustomApi().locked();
+        System.out.println(JSON.toJSONString(res));
         assert res.isSuccess();
     }
 }
