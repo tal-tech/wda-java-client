@@ -2,16 +2,16 @@ package cn.speiyou.wda.findelement;
 
 import cn.speiyou.wda.BaseApi;
 import cn.speiyou.wda.BaseResponse;
+import cn.speiyou.wda.Error;
 import cn.speiyou.wda.WDAClient;
 import cn.speiyou.wda.findelement.req.QueryInfo;
 import cn.speiyou.wda.findelement.res.Element;
-import cn.speiyou.wda.session.req.AppParam;
-import cn.speiyou.wda.session.res.CreateSession;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -39,11 +39,16 @@ public class FindElementApi extends BaseApi {
                 .post(body)
                 .build();
         try (Response res = execute(request)) {
-            return JSON.parseObject(Objects.requireNonNull(res.body()).string(),
-                    new TypeReference<BaseResponse<List<Element>>>(){});
+            String s = Objects.requireNonNull(res.body()).string();
+            if (StringUtils.contains(s, "traceback")) {
+                return handleError(s);
+            }
+            BaseResponse<List<Element>> br = JSON.parseObject(s, new TypeReference<BaseResponse<List<Element>>>(){});
+            br.setSuccess(true);
+            return br;
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return new BaseResponse<>();
         }
     }
 

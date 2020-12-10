@@ -10,6 +10,7 @@ import com.alibaba.fastjson.TypeReference;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
@@ -56,7 +57,11 @@ public class SessionApi extends BaseApi {
                 .post(body)
                 .build();
         try (Response res = execute(request)) {
-            return JSON.parseObject(Objects.requireNonNull(res.body()).string(), BaseResponse.class);
+            String s = Objects.requireNonNull(res.body()).string();
+            if (StringUtils.contains(s, "traceback")) {
+                return handleError(s);
+            }
+            return JSON.parseObject(s, BaseResponse.class);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -76,7 +81,11 @@ public class SessionApi extends BaseApi {
                 .post(body)
                 .build();
         try (Response res = execute(request)) {
-            return JSON.parseObject(Objects.requireNonNull(res.body()).string(), BaseResponse.class);
+            String s = Objects.requireNonNull(res.body()).string();
+            if (StringUtils.contains(s, "traceback")) {
+                return handleError(s);
+            }
+            return JSON.parseObject(s, BaseResponse.class);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -96,7 +105,11 @@ public class SessionApi extends BaseApi {
                 .post(body)
                 .build();
         try (Response res = execute(request)) {
-            return JSON.parseObject(Objects.requireNonNull(res.body()).string(), BaseResponse.class);
+            String s = Objects.requireNonNull(res.body()).string();
+            if (StringUtils.contains(s, "traceback")) {
+                return handleError(s);
+            }
+            return JSON.parseObject(s, BaseResponse.class);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

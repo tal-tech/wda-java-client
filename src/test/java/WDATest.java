@@ -24,7 +24,7 @@ public class WDATest {
     @Before
     public void init() {
         this.client = new WDAClient("127.0.0.1", 8100);
-        this.currentSessionId = "FE965687-A6BB-4E49-9CF2-6654172BB20B";
+        this.currentSessionId = "BFF1035C-3592-4D39-BD1E-A93D5004E0BF1";
     }
 
     @Test
@@ -75,6 +75,6 @@ public class WDATest {
         queryInfo.setValue("XCUIElementTypeStaticText");
         BaseResponse<List<Element>> res = this.client.getFindElementApi().elements(currentSessionId, queryInfo);
         System.out.println("查找到元素：" + JSON.toJSONString(res));
-        assert res != null && res.getValue() != null && res.getValue().size() > 0;
+        assert res.isSuccess();
     }
 }

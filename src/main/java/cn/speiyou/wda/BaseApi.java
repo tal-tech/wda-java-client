@@ -1,11 +1,15 @@
 package cn.speiyou.wda;
 
+import cn.speiyou.wda.findelement.res.Element;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author ：cmlanche
@@ -44,4 +48,11 @@ public class BaseApi {
         return String.format("%s/session/%s", getBaseUrl(), sessionId);
     }
 
+    public <T> BaseResponse<T> handleError(String res) {
+        BaseResponse<Error> errRes = JSON.parseObject(res, new TypeReference<BaseResponse<Error>>(){});
+        BaseResponse<T> r = new BaseResponse<>();
+        r.setSuccess(false);
+        r.setErr(errRes.getValue());
+        return r;
+    }
 }

@@ -7,13 +7,13 @@ package cn.speiyou.wda.findelement.res;
 public class Element {
 
     // 元素ID
-    private String ELEMENT;
+    private String element;
 
-    public String getELEMENT() {
-        return ELEMENT;
+    public String getElement() {
+        return element;
     }
 
-    public void setELEMENT(String ELEMENT) {
-        this.ELEMENT = ELEMENT;
+    public void setElement(String element) {
+        this.element = element;
     }
 }

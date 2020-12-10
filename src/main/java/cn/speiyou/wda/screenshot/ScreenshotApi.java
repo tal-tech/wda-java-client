@@ -28,11 +28,10 @@ public class ScreenshotApi extends BaseApi {
                 .url(getBaseUrl() + "/screenshot")
                 .build();
         try (Response res = execute(request)) {
-            BaseResponse<String> r = JSON.parseObject(Objects.requireNonNull(res.body()).string(), BaseResponse.class);
-            return r;
+            return JSON.parseObject(Objects.requireNonNull(res.body()).string(), BaseResponse.class);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return new BaseResponse<>();
         }
     }
 }
