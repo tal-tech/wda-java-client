@@ -5,7 +5,6 @@ import cn.speiyou.wda.BaseResponse;
 import cn.speiyou.wda.WDAClient;
 import cn.speiyou.wda.custom.res.ActiveAppInfo;
 import cn.speiyou.wda.custom.res.WDADeviceInfo;
-import cn.speiyou.wda.findelement.res.Element;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import okhttp3.Request;
@@ -13,7 +12,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -32,22 +30,7 @@ public class CustomApi extends BaseApi {
      * @return
      */
     public BaseResponse deactiveApp(String session) {
-        Request request = new Request.Builder()
-                .url(getBaseUrlWithSession(session) + "/wda/deactivateApp")
-                .post(RequestBody.create("", JSON_TYPE))
-                .build();
-        try (Response res = execute(request)) {
-            String s = Objects.requireNonNull(res.body()).string();
-            if (StringUtils.contains(s, "traceback")) {
-                return handleError(s);
-            }
-            BaseResponse br = JSON.parseObject(s, BaseResponse.class);
-            br.setSuccess(true);
-            return br;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new BaseResponse<>();
-        }
+        return post(getBaseUrlWithSession(session) + "/wda/deactivateApp", null);
     }
 
     /**
@@ -55,19 +38,7 @@ public class CustomApi extends BaseApi {
      * @return
      */
     public BaseResponse lock() {
-        Request request = new Request.Builder()
-                .url(getBaseUrl() + "/wda/lock")
-                .post(RequestBody.create("", JSON_TYPE))
-                .build();
-        try (Response res = execute(request)) {
-            String s = Objects.requireNonNull(res.body()).string();
-            BaseResponse br = JSON.parseObject(s, BaseResponse.class);
-            br.setSuccess(true);
-            return br;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new BaseResponse<>();
-        }
+        return post(getBaseUrl() + "/wda/lock", null);
     }
 
 
@@ -76,19 +47,7 @@ public class CustomApi extends BaseApi {
      * @return
      */
     public BaseResponse unlock() {
-        Request request = new Request.Builder()
-                .url(getBaseUrl() + "/wda/unlock")
-                .post(RequestBody.create("", JSON_TYPE))
-                .build();
-        try (Response res = execute(request)) {
-            String s = Objects.requireNonNull(res.body()).string();
-            BaseResponse br = JSON.parseObject(s, BaseResponse.class);
-            br.setSuccess(true);
-            return br;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new BaseResponse<>();
-        }
+        return post(getBaseUrl() + "/wda/unlock", null);
     }
 
     /**
@@ -96,18 +55,7 @@ public class CustomApi extends BaseApi {
      * @return
      */
     public BaseResponse<ActiveAppInfo> getActiveAppInfo() {
-        Request request = new Request.Builder()
-                .url(getBaseUrl() + "/wda/activeAppInfo")
-                .build();
-        try (Response res = execute(request)) {
-            String s = Objects.requireNonNull(res.body()).string();
-            BaseResponse<ActiveAppInfo> br = JSON.parseObject(s, new TypeReference<BaseResponse<ActiveAppInfo>>(){});
-            br.setSuccess(true);
-            return br;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new BaseResponse<>();
-        }
+        return get(getBaseUrl() + "/wda/activeAppInfo");
     }
 
     /**
@@ -115,18 +63,7 @@ public class CustomApi extends BaseApi {
      * @return
      */
     public BaseResponse<WDADeviceInfo> getDeviceInfo() {
-        Request request = new Request.Builder()
-                .url(getBaseUrl() + "/wda/device/info")
-                .build();
-        try (Response res = execute(request)) {
-            String s = Objects.requireNonNull(res.body()).string();
-            BaseResponse<WDADeviceInfo> br = JSON.parseObject(s, new TypeReference<BaseResponse<WDADeviceInfo>>(){});
-            br.setSuccess(true);
-            return br;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new BaseResponse<>();
-        }
+        return get(getBaseUrl() + "/wda/device/info");
     }
 
     /**
@@ -134,19 +71,7 @@ public class CustomApi extends BaseApi {
      * @return
      */
     public BaseResponse homeScreen() {
-        Request request = new Request.Builder()
-                .url(getBaseUrl() + "/wda/homescreen")
-                .post(RequestBody.create("", JSON_TYPE))
-                .build();
-        try (Response res = execute(request)) {
-            String s = Objects.requireNonNull(res.body()).string();
-            BaseResponse br = JSON.parseObject(s, BaseResponse.class);
-            br.setSuccess(true);
-            return br;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new BaseResponse<>();
-        }
+        return post(getBaseUrl() + "/wda/homescreen", null);
     }
 
     /**
@@ -154,17 +79,6 @@ public class CustomApi extends BaseApi {
      * @return
      */
     public BaseResponse<Boolean> locked() {
-        Request request = new Request.Builder()
-                .url(getBaseUrl() + "/wda/locked")
-                .build();
-        try (Response res = execute(request)) {
-            String s = Objects.requireNonNull(res.body()).string();
-            BaseResponse<Boolean> br = JSON.parseObject(s, BaseResponse.class);
-            br.setSuccess(true);
-            return br;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new BaseResponse<>();
-        }
+        return get(getBaseUrl() + "/wda/locked");
     }
 }

@@ -2,6 +2,8 @@ import cn.speiyou.wda.BaseResponse;
 import cn.speiyou.wda.WDAClient;
 import cn.speiyou.wda.custom.res.ActiveAppInfo;
 import cn.speiyou.wda.custom.res.WDADeviceInfo;
+import cn.speiyou.wda.element.res.WDARect;
+import cn.speiyou.wda.element.res.WindowSize;
 import cn.speiyou.wda.findelement.req.QueryInfo;
 import cn.speiyou.wda.findelement.req.QueryUsing;
 import cn.speiyou.wda.findelement.res.Element;
@@ -20,13 +22,13 @@ import java.util.List;
 public class WDATest {
 
     private WDAClient client;
-    private String currentSessionId;
+    private String currentSessionId = "06153756-5619-404F-901C-AEB900F79180";;
     private String appleMapPkg = "com.apple.Maps";
+    private String targetElementUUID = "0F000000-0000-0000-D303-000000000000";
 
     @Before
     public void init() {
         this.client = new WDAClient("127.0.0.1", 8100);
-        this.currentSessionId = "7D4F9933-BBB0-4315-B4FE-335249684C38";
     }
 
     @Test
@@ -77,6 +79,16 @@ public class WDATest {
         queryInfo.setUsing(QueryUsing.CLASS_NAME);
         queryInfo.setValue("XCUIElementTypeStaticText");
         BaseResponse<List<Element>> res = this.client.getFindElementApi().elements(currentSessionId, queryInfo);
+        System.out.println("查找到元素：" + JSON.toJSONString(res));
+        assert res.isSuccess();
+    }
+
+    @Test
+    public void childElements() {
+        QueryInfo queryInfo = new QueryInfo();
+        queryInfo.setUsing(QueryUsing.CLASS_NAME);
+        queryInfo.setValue("XCUIElementTypeStaticText");
+        BaseResponse<List<Element>> res = this.client.getFindElementApi().elements(currentSessionId, targetElementUUID, queryInfo);
         System.out.println("查找到元素：" + JSON.toJSONString(res));
         assert res.isSuccess();
     }
@@ -133,6 +145,55 @@ public class WDATest {
     @Test
     public void locked() {
         BaseResponse<Boolean> res = this.client.getCustomApi().locked();
+        System.out.println(JSON.toJSONString(res));
+        assert res.isSuccess();
+    }
+
+    @Test
+    public void getWindowSize() {
+        BaseResponse<WindowSize> res = this.client.getElementApi().getWindowSize(currentSessionId);
+        System.out.println(JSON.toJSONString(res));
+        assert res.isSuccess();
+    }
+
+    @Test
+    public void elementEnabled() {
+        BaseResponse<Boolean> res = this.client.getElementApi().enabled(currentSessionId, targetElementUUID);
+        System.out.println(JSON.toJSONString(res));
+        assert res.isSuccess();
+    }
+
+    @Test
+    public void elementRect() {
+        BaseResponse<WDARect> res = this.client.getElementApi().rect(currentSessionId, targetElementUUID);
+        System.out.println(JSON.toJSONString(res));
+        assert res.isSuccess();
+    }
+
+    @Test
+    public void elementText() {
+        BaseResponse<String> res = this.client.getElementApi().text(currentSessionId, targetElementUUID);
+        System.out.println(JSON.toJSONString(res));
+        assert res.isSuccess();
+    }
+
+    @Test
+    public void elementDisplayed() {
+        BaseResponse<Boolean> res = this.client.getElementApi().displayed(currentSessionId, targetElementUUID);
+        System.out.println(JSON.toJSONString(res));
+        assert res.isSuccess();
+    }
+
+    @Test
+    public void elementSelected() {
+        BaseResponse<Boolean> res = this.client.getElementApi().selected(currentSessionId, targetElementUUID);
+        System.out.println(JSON.toJSONString(res));
+        assert res.isSuccess();
+    }
+
+    @Test
+    public void elementName() {
+        BaseResponse<String> res = this.client.getElementApi().name(currentSessionId, targetElementUUID);
         System.out.println(JSON.toJSONString(res));
         assert res.isSuccess();
     }

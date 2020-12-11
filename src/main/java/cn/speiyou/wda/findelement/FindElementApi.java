@@ -33,23 +33,18 @@ public class FindElementApi extends BaseApi {
      * @return
      */
     public BaseResponse<List<Element>> elements(String sessionId, QueryInfo queryInfo) {
-        RequestBody body = RequestBody.create(JSON.toJSONString(queryInfo), JSON_TYPE);
-        Request request = new Request.Builder()
-                .url(getBaseUrlWithSession(sessionId) + "/elements")
-                .post(body)
-                .build();
-        try (Response res = execute(request)) {
-            String s = Objects.requireNonNull(res.body()).string();
-            if (StringUtils.contains(s, "traceback")) {
-                return handleError(s);
-            }
-            BaseResponse<List<Element>> br = JSON.parseObject(s, new TypeReference<BaseResponse<List<Element>>>(){});
-            br.setSuccess(true);
-            return br;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new BaseResponse<>();
-        }
+        return post(getBaseUrlWithSession(sessionId) + "/elements", queryInfo);
+    }
+
+    /**
+     * 查找某个元素下的符合某条件的控件
+     * @param sessionId
+     * @param parentElementUUID
+     * @param queryInfo
+     * @return
+     */
+    public BaseResponse<List<Element>> elements(String sessionId, String parentElementUUID, QueryInfo queryInfo) {
+        return post(getBaseUrlWithSessionAndUUID(sessionId, parentElementUUID) + "/elements", queryInfo);
     }
 
 }

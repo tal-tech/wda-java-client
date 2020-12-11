@@ -28,18 +28,6 @@ public class OrientationApi extends BaseApi {
      * @return
      */
     public BaseResponse<String> getOrientation(String sessionId) {
-        Request request = new Request.Builder().url(getBaseUrlWithSession(sessionId) + "/orientation").build();
-        try (Response res = getHttpClient().newCall(request).execute()) {
-            String s = Objects.requireNonNull(res.body()).string();
-            if (StringUtils.contains(s, "traceback")) {
-                return handleError(s);
-            }
-            BaseResponse<String> r =  JSON.parseObject(s, BaseResponse.class);
-            r.setSuccess(true);
-            return r;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new BaseResponse<>();
-        }
+        return get(getBaseUrlWithSession(sessionId) + "/orientation");
     }
 }

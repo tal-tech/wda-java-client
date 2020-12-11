@@ -24,14 +24,6 @@ public class ScreenshotApi extends BaseApi {
      * wda会按一次物理键（圆形Home键）
      */
     public BaseResponse<String> screenshot() {
-        Request request = new Request.Builder()
-                .url(getBaseUrl() + "/screenshot")
-                .build();
-        try (Response res = execute(request)) {
-            return JSON.parseObject(Objects.requireNonNull(res.body()).string(), BaseResponse.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new BaseResponse<>();
-        }
+        return get(getBaseUrl() + "/screenshot");
     }
 }

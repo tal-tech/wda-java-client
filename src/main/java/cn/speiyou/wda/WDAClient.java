@@ -1,6 +1,8 @@
 package cn.speiyou.wda;
 
+import cn.speiyou.wda.alert.AlertApi;
 import cn.speiyou.wda.custom.CustomApi;
+import cn.speiyou.wda.element.ElementApi;
 import cn.speiyou.wda.findelement.FindElementApi;
 import cn.speiyou.wda.orientation.OrientationApi;
 import cn.speiyou.wda.screenshot.ScreenshotApi;
@@ -35,6 +37,10 @@ public class WDAClient {
     private OrientationApi orientationApi;
     // 自定义Api
     private CustomApi customApi;
+    // 控件操作Api
+    private ElementApi elementApi;
+    // 对话框操作API
+    private AlertApi alertApi;
 
     public WDAClient(String host, int port) {
         this.host = host;
@@ -44,6 +50,8 @@ public class WDAClient {
         this.findElementApi = new FindElementApi(this);
         this.orientationApi = new OrientationApi(this);
         this.customApi = new CustomApi(this);
+        this.elementApi = new ElementApi(this);
+        this.alertApi = new AlertApi(this);
     }
 
     public String getBaseUrl() {
@@ -126,5 +134,13 @@ public class WDAClient {
 
     public CustomApi getCustomApi() {
         return customApi;
+    }
+
+    public ElementApi getElementApi() {
+        return elementApi;
+    }
+
+    public AlertApi getAlertApi() {
+        return alertApi;
     }
 }
