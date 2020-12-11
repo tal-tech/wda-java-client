@@ -4,6 +4,7 @@ import cn.speiyou.wda.BaseApi;
 import cn.speiyou.wda.BaseResponse;
 import cn.speiyou.wda.WDAClient;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class AlertApi extends BaseApi {
      * @return 如果失败，则当前界面可能没有alert提示框
      */
     public BaseResponse<String> getAlertText() {
-        return get(getBaseUrl() + "/alert/text");
+        return get(getBaseUrl() + "/alert/text", null);
     }
 
     /**
@@ -31,7 +32,8 @@ public class AlertApi extends BaseApi {
      * @return
      */
     public BaseResponse<List<String>> getAlertButtons(String sessionId) {
-        return get(getBaseUrlWithSession(sessionId) + "/wda/alert/buttons");
+        return get(getBaseUrlWithSession(sessionId) + "/wda/alert/buttons",
+                new TypeReference<BaseResponse<List<String>>>(){});
     }
 
     /**
@@ -40,7 +42,7 @@ public class AlertApi extends BaseApi {
      * @return
      */
     public BaseResponse dismiss(String sessionId) {
-        return post(getBaseUrlWithSession(sessionId) + "/alert/dismiss", null);
+        return post(getBaseUrlWithSession(sessionId) + "/alert/dismiss", null, null);
     }
 
     /**
@@ -52,6 +54,6 @@ public class AlertApi extends BaseApi {
     public BaseResponse accept(String sessionId, String name) {
         JSONObject obj = new JSONObject();
         obj.put("name", name);
-        return post(getBaseUrlWithSession(sessionId) + "/alert/accept", obj);
+        return post(getBaseUrlWithSession(sessionId) + "/alert/accept", obj, null);
     }
 }

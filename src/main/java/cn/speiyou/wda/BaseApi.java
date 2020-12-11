@@ -52,18 +52,18 @@ public class BaseApi {
      * @param <T>
      * @return
      */
-    public <T> BaseResponse<T> get(String url) {
-        return execute(new Request.Builder().url(url).build());
+    public <T> BaseResponse<T> get(String url, TypeReference<BaseResponse<T>> typeReference) {
+        return execute(new Request.Builder().url(url).build(), typeReference);
     }
 
     /**
      * post请求
      */
-    public <T> BaseResponse<T> post(String url, Object obj) {
+    public <T> BaseResponse<T> post(String url, Object obj, TypeReference<BaseResponse<T>> typeReference) {
         return execute(new Request.Builder()
                 .url(url)
                 .post(RequestBody.create(obj == null ? "" : JSON.toJSONString(obj), JSON_TYPE))
-                .build());
+                .build(), typeReference);
     }
 
     /**
@@ -72,13 +72,18 @@ public class BaseApi {
      * @param <T>
      * @return
      */
-    private <T> BaseResponse<T> execute(Request request) {
+    private <T> BaseResponse<T> execute(Request request, TypeReference<BaseResponse<T>> typeReference) {
         try (Response res = wda.getClient().newCall(request).execute()) {
             String s = Objects.requireNonNull(res.body()).string();
             if (StringUtils.contains(s, "traceback")) {
                 return handleError(s);
             }
-            BaseResponse<T> r = JSON.parseObject(s, new TypeReference<BaseResponse<T>>(){});
+            if (typeReference == null) {
+                BaseResponse r = JSON.parseObject(s, BaseResponse.class);
+                r.setSuccess(true);
+                return r;
+            }
+            BaseResponse<T> r = JSON.parseObject(s, typeReference);
             r.setSuccess(true);
             return r;
         } catch (Exception e) {

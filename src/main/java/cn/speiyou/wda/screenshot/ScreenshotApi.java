@@ -24,6 +24,6 @@ public class ScreenshotApi extends BaseApi {
      * wda会按一次物理键（圆形Home键）
      */
     public BaseResponse<String> screenshot() {
-        return get(getBaseUrl() + "/screenshot");
+        return get(getBaseUrl() + "/screenshot", null);
     }
 }

@@ -22,9 +22,9 @@ import java.util.List;
 public class WDATest {
 
     private WDAClient client;
-    private String currentSessionId = "06153756-5619-404F-901C-AEB900F79180";;
+    private String currentSessionId = "869794A3-6644-49DB-B958-71004A960728";;
     private String appleMapPkg = "com.apple.Maps";
-    private String targetElementUUID = "0F000000-0000-0000-D303-000000000000";
+    private String targetElementUUID = "27000000-0000-0000-D303-000000000000";
 
     @Before
     public void init() {
@@ -43,15 +43,17 @@ public class WDATest {
         assert this.client.health();
 
         // wda health check
-        assert this.client.getSessionApi().healthCheck();
+        assert this.client.getSessionApi().healthCheck().isSuccess();
     }
 
     @Test
     public void createSession() {
         BaseResponse<CreateSession> res = this.client.getSessionApi().createSession();
-        currentSessionId = res.getValue().getSessionId();
-        assert StringUtils.isNotEmpty(res.getValue().getSessionId());
-        System.out.println("创建Session成功：" + res.getValue().getSessionId());
+        if (res.isSuccess()) {
+            currentSessionId = res.getValue().getSessionId();
+            assert StringUtils.isNotEmpty(res.getValue().getSessionId());
+            System.out.println("创建Session成功：" + res.getValue().getSessionId());
+        }
         assert res.isSuccess();
     }
 
@@ -70,6 +72,7 @@ public class WDATest {
     @Test
     public void screenshot() {
         BaseResponse<String> res = this.client.getScreenshotApi().screenshot();
+        System.out.println(res.getValue());
         assert res.isSuccess();
     }
 
@@ -194,6 +197,20 @@ public class WDATest {
     @Test
     public void elementName() {
         BaseResponse<String> res = this.client.getElementApi().name(currentSessionId, targetElementUUID);
+        System.out.println(JSON.toJSONString(res));
+        assert res.isSuccess();
+    }
+
+    @Test
+    public void getAlertButtons() {
+        BaseResponse<List<String>> res = this.client.getAlertApi().getAlertButtons(currentSessionId);
+        System.out.println(JSON.toJSONString(res));
+        assert res.isSuccess();
+    }
+
+    @Test
+    public void getAlertText() {
+        BaseResponse<String> res = this.client.getAlertApi().getAlertText();
         System.out.println(JSON.toJSONString(res));
         assert res.isSuccess();
     }

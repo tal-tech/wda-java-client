@@ -28,6 +28,6 @@ public class OrientationApi extends BaseApi {
      * @return
      */
     public BaseResponse<String> getOrientation(String sessionId) {
-        return get(getBaseUrlWithSession(sessionId) + "/orientation");
+        return get(getBaseUrlWithSession(sessionId) + "/orientation", null);
     }
 }

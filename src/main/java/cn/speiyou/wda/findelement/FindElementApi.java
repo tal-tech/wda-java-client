@@ -33,7 +33,8 @@ public class FindElementApi extends BaseApi {
      * @return
      */
     public BaseResponse<List<Element>> elements(String sessionId, QueryInfo queryInfo) {
-        return post(getBaseUrlWithSession(sessionId) + "/elements", queryInfo);
+        return post(getBaseUrlWithSession(sessionId) + "/elements",
+                queryInfo, new TypeReference<BaseResponse<List<Element>>>(){});
     }
 
     /**
@@ -44,7 +45,8 @@ public class FindElementApi extends BaseApi {
      * @return
      */
     public BaseResponse<List<Element>> elements(String sessionId, String parentElementUUID, QueryInfo queryInfo) {
-        return post(getBaseUrlWithSessionAndUUID(sessionId, parentElementUUID) + "/elements", queryInfo);
+        return post(getBaseUrlWithSessionAndUUID(sessionId, parentElementUUID) + "/elements",
+                queryInfo, new TypeReference<BaseResponse<List<Element>>>(){});
     }
 
 }

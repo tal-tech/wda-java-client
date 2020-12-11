@@ -9,6 +9,7 @@ import cn.speiyou.wda.session.req.FromToParam;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class ElementApi extends BaseApi {
      * @return
      */
     public BaseResponse<WindowSize> getWindowSize(String sessionId) {
-        return get(getBaseUrlWithSession(sessionId) + "/window/size");
+        return get(getBaseUrlWithSession(sessionId) + "/window/size", new TypeReference<BaseResponse<WindowSize>>(){});
     }
 
     /**
@@ -38,7 +39,7 @@ public class ElementApi extends BaseApi {
      * @return
      */
     public BaseResponse<Boolean> enabled(String sessionId, String elementUUID) {
-        return get("/enabled", sessionId, elementUUID);
+        return get("/enabled", sessionId, elementUUID, null);
     }
 
     /**
@@ -48,7 +49,7 @@ public class ElementApi extends BaseApi {
      * @return
      */
     public BaseResponse<WDARect> rect(String sessionId, String elementUUID) {
-        return get("/rect", sessionId, elementUUID);
+        return get("/rect", sessionId, elementUUID, new TypeReference<BaseResponse<WDARect>>(){});
     }
 
     /**
@@ -58,7 +59,7 @@ public class ElementApi extends BaseApi {
      * @return
      */
     public BaseResponse<String> text(String sessionId, String elementUUID) {
-        return get("/text", sessionId, elementUUID);
+        return get("/text", sessionId, elementUUID, null);
     }
 
     /**
@@ -68,7 +69,7 @@ public class ElementApi extends BaseApi {
      * @return
      */
     public BaseResponse<Boolean> displayed(String sessionId, String elementUUID) {
-        return get("/displayed", sessionId, elementUUID);
+        return get("/displayed", sessionId, elementUUID, null);
     }
 
     /**
@@ -78,7 +79,7 @@ public class ElementApi extends BaseApi {
      * @return
      */
     public BaseResponse<Boolean> selected(String sessionId, String elementUUID) {
-        return get("/selected", sessionId, elementUUID);
+        return get("/selected", sessionId, elementUUID, null);
     }
 
     /**
@@ -88,7 +89,7 @@ public class ElementApi extends BaseApi {
      * @return
      */
     public BaseResponse<String> name(String sessionId, String elementUUID) {
-        return get("/name", sessionId, elementUUID);
+        return get("/name", sessionId, elementUUID, null);
     }
 
     /**
@@ -98,7 +99,7 @@ public class ElementApi extends BaseApi {
      * @return
      */
     public BaseResponse<String> screenshot(String sessionId, String elementUUID) {
-        return get("/screenshot", sessionId, elementUUID);
+        return get("/screenshot", sessionId, elementUUID, null);
     }
 
     /**
@@ -107,8 +108,8 @@ public class ElementApi extends BaseApi {
      * @param elementUUID
      * @return
      */
-    private <T> BaseResponse<T> get(String name, String sessionId, String elementUUID) {
-        return get(getBaseUrlWithSessionAndUUID(sessionId, elementUUID) + name);
+    private <T> BaseResponse<T> get(String name, String sessionId, String elementUUID, TypeReference<BaseResponse<T>> typeReference) {
+        return get(getBaseUrlWithSessionAndUUID(sessionId, elementUUID) + name, typeReference);
     }
 
     /**
@@ -120,7 +121,7 @@ public class ElementApi extends BaseApi {
     public BaseResponse value(String sessionId, String elementUUID, String value) {
         JSONObject obj = new JSONObject();
         obj.put("value", value);
-        return post("/value", sessionId, elementUUID, obj);
+        return post("/value", sessionId, elementUUID, obj, null);
     }
 
     /**
@@ -130,7 +131,7 @@ public class ElementApi extends BaseApi {
      * @return
      */
     public BaseResponse click(String sessionId, String elementUUID) {
-        return post("/click", sessionId, elementUUID, null);
+        return post("/click", sessionId, elementUUID, null, null);
     }
 
     /**
@@ -140,7 +141,7 @@ public class ElementApi extends BaseApi {
      * @return
      */
     public BaseResponse clear(String sessionId, String elementUUID) {
-        return post("/clear", sessionId, elementUUID, null);
+        return post("/clear", sessionId, elementUUID, null, null);
     }
 
     /**
@@ -160,7 +161,7 @@ public class ElementApi extends BaseApi {
         JSONObject json = new JSONObject();
         json.put("direction", direction);
         json.put("velocity", velocity);
-        return post("/swip", sessionId, elementUUID, json);
+        return post("/swip", sessionId, elementUUID, json, null);
     }
 
     /**
@@ -173,7 +174,7 @@ public class ElementApi extends BaseApi {
     public BaseResponse touchAndHold(String sessionId, String elementUUID, int duration) {
         JSONObject json = new JSONObject();
         json.put("duration", duration);
-        return post("/touchAndHold", sessionId, elementUUID, json);
+        return post("/touchAndHold", sessionId, elementUUID, json, null);
     }
 
     /**
@@ -184,7 +185,7 @@ public class ElementApi extends BaseApi {
      * @return
      */
     public BaseResponse dragFromToForDuration(String sessionId, String elementUUID, FromToParam param) {
-        return post("/dragfromtoforduration", sessionId, elementUUID, param);
+        return post("/dragfromtoforduration", sessionId, elementUUID, param, null);
     }
 
     /**
@@ -194,7 +195,7 @@ public class ElementApi extends BaseApi {
      * @return
      */
     public BaseResponse dragFromToForDurationInCoordinate(String sessionId, FromToParam param) {
-        return post(getBaseUrlWithSession(sessionId) + "/wda/dragfromtoforduration", param);
+        return post(getBaseUrlWithSession(sessionId) + "/wda/dragfromtoforduration", param, null);
     }
 
     /**
@@ -218,7 +219,7 @@ public class ElementApi extends BaseApi {
         obj.put("order", order);
         obj.put("offset", (float) offset / 10);
         return post(getBaseUrlWithSession(sessionId)
-                + String.format("/wda/pickerwheel/%s/select", uuid), obj);
+                + String.format("/wda/pickerwheel/%s/select", uuid), obj, null);
     }
 
     /**
@@ -240,7 +241,7 @@ public class ElementApi extends BaseApi {
         JSONObject json = new JSONObject();
         json.put("value", keys);
         json.put("frequency", frequency);
-        return post(getBaseUrlWithSession(sessionId) + "/wda/keys", json);
+        return post(getBaseUrlWithSession(sessionId) + "/wda/keys", json, null);
     }
 
     /**
@@ -262,7 +263,7 @@ public class ElementApi extends BaseApi {
         JSONObject json = new JSONObject();
         json.put("value", keys);
         json.put("frequency", frequency);
-        return post(getBaseUrlWithSession(sessionId) + "/wda/keys", json);
+        return post(getBaseUrlWithSession(sessionId) + "/wda/keys", json, null);
     }
 
     /**
@@ -290,7 +291,7 @@ public class ElementApi extends BaseApi {
         json.put("duration", duration);
         json.put("pressure", pressure);
         return post(getBaseUrlWithSession(session) +
-                String.format("/wda/element/%s/forceTouch", elementUUID), json);
+                String.format("/wda/element/%s/forceTouch", elementUUID), json, null);
     }
 
     /**
@@ -309,7 +310,7 @@ public class ElementApi extends BaseApi {
         JSONObject json = new JSONObject();
         json.put("x", x);
         json.put("y", y);
-        return post(getBaseUrlWithSession(sessionId) + "/wda/doubleTap", json);
+        return post(getBaseUrlWithSession(sessionId) + "/wda/doubleTap", json, null);
     }
 
     /**
@@ -331,7 +332,7 @@ public class ElementApi extends BaseApi {
         json.put("x", x);
         json.put("y", y);
         json.put("duration", duration);
-        return post(getBaseUrlWithSession(sessionId) + "/wda/touchAndHold", duration);
+        return post(getBaseUrlWithSession(sessionId) + "/wda/touchAndHold", duration, null);
     }
 
     /**
@@ -340,7 +341,8 @@ public class ElementApi extends BaseApi {
      * @param elementUUID
      * @return
      */
-    private <T> BaseResponse<T> post(String name, String sessionId, String elementUUID, Object obj) {
-        return post(getBaseUrlWithSessionAndUUID(sessionId, elementUUID) + name, obj);
+    private <T> BaseResponse<T> post(String name, String sessionId, String elementUUID,
+                                     Object obj, TypeReference<BaseResponse<T>> typeReference) {
+        return post(getBaseUrlWithSessionAndUUID(sessionId, elementUUID) + name, obj, typeReference);
     }
 }

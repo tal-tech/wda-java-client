@@ -30,7 +30,7 @@ public class CustomApi extends BaseApi {
      * @return
      */
     public BaseResponse deactiveApp(String session) {
-        return post(getBaseUrlWithSession(session) + "/wda/deactivateApp", null);
+        return post(getBaseUrlWithSession(session) + "/wda/deactivateApp", null, null);
     }
 
     /**
@@ -38,7 +38,7 @@ public class CustomApi extends BaseApi {
      * @return
      */
     public BaseResponse lock() {
-        return post(getBaseUrl() + "/wda/lock", null);
+        return post(getBaseUrl() + "/wda/lock", null, null);
     }
 
 
@@ -47,7 +47,7 @@ public class CustomApi extends BaseApi {
      * @return
      */
     public BaseResponse unlock() {
-        return post(getBaseUrl() + "/wda/unlock", null);
+        return post(getBaseUrl() + "/wda/unlock", null, null);
     }
 
     /**
@@ -55,7 +55,8 @@ public class CustomApi extends BaseApi {
      * @return
      */
     public BaseResponse<ActiveAppInfo> getActiveAppInfo() {
-        return get(getBaseUrl() + "/wda/activeAppInfo");
+        return get(getBaseUrl() + "/wda/activeAppInfo",
+                new TypeReference<BaseResponse<ActiveAppInfo>>(){});
     }
 
     /**
@@ -63,7 +64,8 @@ public class CustomApi extends BaseApi {
      * @return
      */
     public BaseResponse<WDADeviceInfo> getDeviceInfo() {
-        return get(getBaseUrl() + "/wda/device/info");
+        return get(getBaseUrl() + "/wda/device/info",
+                new TypeReference<BaseResponse<WDADeviceInfo>>(){});
     }
 
     /**
@@ -71,7 +73,7 @@ public class CustomApi extends BaseApi {
      * @return
      */
     public BaseResponse homeScreen() {
-        return post(getBaseUrl() + "/wda/homescreen", null);
+        return post(getBaseUrl() + "/wda/homescreen", null, null);
     }
 
     /**
@@ -79,6 +81,6 @@ public class CustomApi extends BaseApi {
      * @return
      */
     public BaseResponse<Boolean> locked() {
-        return get(getBaseUrl() + "/wda/locked");
+        return get(getBaseUrl() + "/wda/locked", null);
     }
 }
