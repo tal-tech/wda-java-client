@@ -3,11 +3,6 @@ package cn.speiyou.wda.screenshot;
 import cn.speiyou.wda.BaseApi;
 import cn.speiyou.wda.BaseResponse;
 import cn.speiyou.wda.WDAClient;
-import com.alibaba.fastjson.JSON;
-import okhttp3.Request;
-import okhttp3.Response;
-
-import java.util.Objects;
 
 /**
  * @author ：cmlanche

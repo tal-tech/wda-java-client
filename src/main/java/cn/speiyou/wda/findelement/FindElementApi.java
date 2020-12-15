@@ -2,19 +2,12 @@ package cn.speiyou.wda.findelement;
 
 import cn.speiyou.wda.BaseApi;
 import cn.speiyou.wda.BaseResponse;
-import cn.speiyou.wda.Error;
 import cn.speiyou.wda.WDAClient;
 import cn.speiyou.wda.findelement.req.QueryInfo;
 import cn.speiyou.wda.findelement.res.Element;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author ：cmlanche

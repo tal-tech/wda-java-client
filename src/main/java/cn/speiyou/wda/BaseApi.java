@@ -2,9 +2,21 @@ package cn.speiyou.wda;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-import okhttp3.*;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.Consts;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpResponseException;
+import org.apache.http.client.fluent.Content;
+import org.apache.http.client.fluent.Request;
+import org.apache.http.client.fluent.Response;
+import org.apache.http.entity.ContentType;
+import org.apache.http.util.EntityUtils;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -13,17 +25,10 @@ import java.util.Objects;
  */
 public class BaseApi {
 
-    public static final MediaType JSON_TYPE
-            = MediaType.get("application/json; charset=utf-8");
-
     protected WDAClient wda;
 
     public BaseApi(WDAClient client) {
         this.wda = client;
-    }
-
-    protected OkHttpClient getHttpClient() {
-        return wda.getClient();
     }
 
     public String getBaseUrl() {
@@ -38,57 +43,14 @@ public class BaseApi {
         return String.format("%s/session/%s/element/%s", getBaseUrl(), sessionId, uuid);
     }
 
-    public <T> BaseResponse<T> handleError(String res) {
-        BaseResponse<Error> errRes = JSON.parseObject(res, new TypeReference<BaseResponse<Error>>(){});
-        BaseResponse<T> r = new BaseResponse<>();
-        r.setSuccess(false);
-        r.setErr(errRes.getValue());
-        return r;
-    }
-
-    /**
-     * get请求
-     * @param url
-     * @param <T>
-     * @return
-     */
     public <T> BaseResponse<T> get(String url, TypeReference<BaseResponse<T>> typeReference) {
-        return execute(new Request.Builder().url(url).build(), typeReference);
+        return HttpUtils.get(url, typeReference);
     }
 
     /**
      * post请求
      */
     public <T> BaseResponse<T> post(String url, Object obj, TypeReference<BaseResponse<T>> typeReference) {
-        return execute(new Request.Builder()
-                .url(url)
-                .post(RequestBody.create(obj == null ? "" : JSON.toJSONString(obj), JSON_TYPE))
-                .build(), typeReference);
-    }
-
-    /**
-     * 执行一个请求
-     * @param request
-     * @param <T>
-     * @return
-     */
-    private <T> BaseResponse<T> execute(Request request, TypeReference<BaseResponse<T>> typeReference) {
-        try (Response res = wda.getClient().newCall(request).execute()) {
-            String s = Objects.requireNonNull(res.body()).string();
-            if (StringUtils.contains(s, "traceback")) {
-                return handleError(s);
-            }
-            if (typeReference == null) {
-                BaseResponse r = JSON.parseObject(s, BaseResponse.class);
-                r.setSuccess(true);
-                return r;
-            }
-            BaseResponse<T> r = JSON.parseObject(s, typeReference);
-            r.setSuccess(true);
-            return r;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new BaseResponse<>();
-        }
+        return HttpUtils.post(url, obj, typeReference);
     }
 }

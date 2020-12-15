@@ -22,7 +22,7 @@ import java.util.List;
 public class WDATest {
 
     private WDAClient client;
-    private String currentSessionId = "869794A3-6644-49DB-B958-71004A960728";;
+    private String currentSessionId = "D04B7432-2089-44D7-8EBA-9C605A10030E";;
     private String appleMapPkg = "com.apple.Maps";
     private String targetElementUUID = "27000000-0000-0000-D303-000000000000";
 
@@ -33,14 +33,14 @@ public class WDATest {
 
     @Test
     public void getPageSource() {
-        String ps = this.client.getPageSource();
-        assert StringUtils.isNotEmpty(ps);
+        BaseResponse res = this.client.getPageSource();
+        assert res.isSuccess();
     }
 
     @Test
     public void health() {
         // client health check
-        assert this.client.health();
+        assert this.client.health().isSuccess();
 
         // wda health check
         assert this.client.getSessionApi().healthCheck().isSuccess();

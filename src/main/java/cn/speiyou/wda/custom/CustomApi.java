@@ -5,14 +5,7 @@ import cn.speiyou.wda.BaseResponse;
 import cn.speiyou.wda.WDAClient;
 import cn.speiyou.wda.custom.res.ActiveAppInfo;
 import cn.speiyou.wda.custom.res.WDADeviceInfo;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.Objects;
 
 /**
  * @author ：cmlanche

@@ -8,9 +8,6 @@ import cn.speiyou.wda.orientation.OrientationApi;
 import cn.speiyou.wda.screenshot.ScreenshotApi;
 import cn.speiyou.wda.session.SessionApi;
 import com.alibaba.fastjson.JSON;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
@@ -25,8 +22,6 @@ public class WDAClient {
     private String host;
     // 服务端口
     private int port;
-    // http client
-    private OkHttpClient client = new OkHttpClient();
     // Session模块Api
     private SessionApi sessionApi;
     // 截图模块Api
@@ -61,47 +56,22 @@ public class WDAClient {
     /**
      * 获取控件树
      */
-    public String getPageSource() {
-        Request request = new Request.Builder().url(getBaseUrl() + "/source").build();
-        try (Response res = client.newCall(request).execute()) {
-            BaseResponse<String> r = new BaseResponse<>();
-            r = JSON.parseObject(res.body().string(), r.getClass());
-            if (StringUtils.isNotEmpty(r.getValue())) {
-                return r.getValue();
-            }
-            return null;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+    public BaseResponse getPageSource() {
+        return HttpUtils.get(getBaseUrl() + "/source", null);
     }
 
     /**
      * 检查wda是否健康
      */
-    public boolean health() {
-        Request request = new Request.Builder().url(getBaseUrl() + "/health").build();
-        try (Response res = client.newCall(request).execute()) {
-            String s = Objects.requireNonNull(res.body()).string();
-            return StringUtils.equals("I-AM-ALIVE", s);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+    public BaseResponse<Boolean> health() {
+        return HttpUtils.get(getBaseUrl() + "/health", null);
     }
 
     /**
      * 关闭WDA
      */
-    public boolean shutdown() {
-        Request request = new Request.Builder().url(getBaseUrl() + "/wda/shutdown").build();
-        try (Response res = client.newCall(request).execute()) {
-            String s = Objects.requireNonNull(res.body()).string();
-            return StringUtils.equals("Shutting down", s);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+    public BaseResponse<Boolean> shutdown() {
+        return HttpUtils.get(getBaseUrl() + "/wda/shutdown", null);
     }
 
     public String getHost() {
@@ -110,10 +80,6 @@ public class WDAClient {
 
     public int getPort() {
         return port;
-    }
-
-    public OkHttpClient getClient() {
-        return client;
     }
 
     public SessionApi getSessionApi() {
