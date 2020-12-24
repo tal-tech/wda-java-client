@@ -10,6 +10,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -60,6 +61,17 @@ public class ElementApi extends BaseApi {
      */
     public BaseResponse<String> text(String sessionId, String elementUUID) {
         return get("/text", sessionId, elementUUID, null);
+    }
+
+    /**
+     * 获取某个节点的属性值
+     * @param sessionId
+     * @param elementUUID
+     * @param attrName
+     * @return
+     */
+    public BaseResponse<String> attrValue(String sessionId, String elementUUID, String attrName) {
+        return get("/attribute/" + attrName, sessionId, elementUUID, null);
     }
 
     /**
@@ -171,7 +183,7 @@ public class ElementApi extends BaseApi {
      * @param duration
      * @return
      */
-    public BaseResponse touchAndHold(String sessionId, String elementUUID, int duration) {
+    public BaseResponse touchAndHold(String sessionId, String elementUUID, double duration) {
         JSONObject json = new JSONObject();
         json.put("duration", duration);
         return post("/touchAndHold", sessionId, elementUUID, json, null);
@@ -292,6 +304,27 @@ public class ElementApi extends BaseApi {
         json.put("pressure", pressure);
         return post(getBaseUrlWithSession(session) +
                 String.format("/wda/element/%s/forceTouch", elementUUID), json, null);
+    }
+
+    /**
+     * 以某个元素的左上角为原点，点击某个位置
+     * @param session
+     * @param elementUUID 可以为空，当为空时，相对屏幕左上角为原点，非空时相对此元素的左上角为原点
+     * @param x
+     * @param y
+     * @return
+     */
+    public BaseResponse tap(String session, String elementUUID, double x, double y) {
+        JSONObject json = new JSONObject();
+        json.put("x", x);
+        json.put("y", y);
+        String url = getBaseUrlWithSession(session) + "/wda/tap";
+        if (StringUtils.isNotEmpty(elementUUID)) {
+            url += "/" + elementUUID;
+        } else {
+            url += "/null";
+        }
+        return post(url, json, null);
     }
 
     /**

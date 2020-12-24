@@ -10,7 +10,7 @@ public class QueryUsing {
     public static final String CLASS_CHAIN = "class chain";
     public static final String XPATH = "xpath";
     public static final String PARTIAL_LINK_TEXT = "partial link text";
-    public static final String LINK_TEXT = "partial link text";
+    public static final String LINK_TEXT = "link text";
     public static final String PREDICATE_STRING = "predicate string";
     public static final String NAME = "name";
     public static final String ID = "id";
