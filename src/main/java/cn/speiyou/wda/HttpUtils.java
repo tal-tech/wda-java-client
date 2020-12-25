@@ -22,7 +22,7 @@ import java.util.Map;
  */
 public class HttpUtils {
 
-    private static final int CONNECT_TIMEOUT = 5000;
+    private static final int CONNECT_TIMEOUT = 60000 * 10;
 
     /**
      * get请求
