@@ -1,5 +1,6 @@
 package cn.speiyou.wda;
 
+import cn.speiyou.wda.element.res.WDARect;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import org.apache.commons.lang3.StringUtils;
@@ -20,9 +21,19 @@ import java.util.Map;
  * @author ：cmlanche
  * @date ：Created in 2020/12/15 10:50 上午
  */
-public class HttpUtils {
+public class HttpProxy {
 
-    private static final int CONNECT_TIMEOUT = 60000 * 10;
+    private WDAClient client;
+    private int connectTimeOut = 600000;
+    private int socketTimeOut = 600000;
+    // 最近一次的请求时间
+    private long lastestRequestTime = 0;
+    // 每次请求的间隔
+    private long requestDuration = 0;
+
+    public HttpProxy(WDAClient client) {
+        this.client = client;
+    }
 
     /**
      * get请求
@@ -30,8 +41,9 @@ public class HttpUtils {
      * @param <T>
      * @return
      */
-    public static <T> BaseResponse<T> get(String url, TypeReference<BaseResponse<T>> typeReference) {
-        Request request = Request.Get(url).connectTimeout(CONNECT_TIMEOUT).socketTimeout(CONNECT_TIMEOUT);
+    public <T> BaseResponse<T> get(String url, TypeReference<BaseResponse<T>> typeReference) {
+        restForRequest();
+        Request request = Request.Get(url).connectTimeout(connectTimeOut).socketTimeout(socketTimeOut);
         configureHeaders(request);
         return execute(request, typeReference);
     }
@@ -39,11 +51,36 @@ public class HttpUtils {
     /**
      * post请求
      */
-    public static <T> BaseResponse<T> post(String url, Object obj, TypeReference<BaseResponse<T>> typeReference) {
-        Request request = Request.Post(url).connectTimeout(CONNECT_TIMEOUT).socketTimeout(CONNECT_TIMEOUT);
+    public <T> BaseResponse<T> post(String url, Object obj, TypeReference<BaseResponse<T>> typeReference) {
+        restForRequest();
+        Request request = Request.Post(url).connectTimeout(connectTimeOut).socketTimeout(socketTimeOut);
         configureHeaders(request);
         configureBody(request, obj);
         return execute(request, typeReference);
+    }
+
+    /**
+     * 检查两次请求的时间间隔，如果太短，则要求休眠
+     */
+    private void restForRequest() {
+        if (lastestRequestTime > 0) {
+            if (System.currentTimeMillis() - lastestRequestTime > requestDuration) {
+                sleep(System.currentTimeMillis() - lastestRequestTime);
+            }
+        }
+        lastestRequestTime = System.currentTimeMillis();
+    }
+
+    public void setConnectTimeOut(int connectTimeOut) {
+        this.connectTimeOut = connectTimeOut;
+    }
+
+    public void setSocketTimeOut(int socketTimeOut) {
+        this.socketTimeOut = socketTimeOut;
+    }
+
+    public void setRequestDuration(long requestDuration) {
+        this.requestDuration = requestDuration;
     }
 
     /**
@@ -105,5 +142,13 @@ public class HttpUtils {
         r.setSuccess(false);
         r.setErr(errRes.getValue());
         return r;
+    }
+
+    private static void sleep(long time) {
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -7,10 +7,6 @@ import cn.speiyou.wda.findelement.FindElementApi;
 import cn.speiyou.wda.orientation.OrientationApi;
 import cn.speiyou.wda.screenshot.ScreenshotApi;
 import cn.speiyou.wda.session.SessionApi;
-import com.alibaba.fastjson.JSON;
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.Objects;
 
 /**
  * WebDriverAgent Client
@@ -37,6 +33,8 @@ public class WDAClient {
     // 对话框操作API
     private AlertApi alertApi;
 
+    private HttpProxy httpProxy;
+
     public WDAClient(String host, int port) {
         this.host = host;
         this.port = port;
@@ -47,6 +45,18 @@ public class WDAClient {
         this.customApi = new CustomApi(this);
         this.elementApi = new ElementApi(this);
         this.alertApi = new AlertApi(this);
+        this.httpProxy = new HttpProxy(this);
+    }
+
+    /**
+     *
+     * @param host
+     * @param port
+     * @param restDuration 相邻两次请求不要间隔太短
+     */
+    public WDAClient(String host, int port, int restDuration) {
+        this(host, port);
+        this.httpProxy.setRequestDuration(restDuration);
     }
 
     public String getBaseUrl() {
@@ -57,21 +67,21 @@ public class WDAClient {
      * 获取控件树
      */
     public BaseResponse getPageSource() {
-        return HttpUtils.get(getBaseUrl() + "/source", null);
+        return httpProxy.get(getBaseUrl() + "/source", null);
     }
 
     /**
      * 检查wda是否健康
      */
     public BaseResponse<Boolean> health() {
-        return HttpUtils.get(getBaseUrl() + "/health", null);
+        return httpProxy.get(getBaseUrl() + "/health", null);
     }
 
     /**
      * 关闭WDA
      */
     public BaseResponse<Boolean> shutdown() {
-        return HttpUtils.get(getBaseUrl() + "/wda/shutdown", null);
+        return httpProxy.get(getBaseUrl() + "/wda/shutdown", null);
     }
 
     public String getHost() {
@@ -108,5 +118,9 @@ public class WDAClient {
 
     public AlertApi getAlertApi() {
         return alertApi;
+    }
+
+    public HttpProxy getHttpProxy() {
+        return httpProxy;
     }
 }
