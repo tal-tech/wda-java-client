@@ -65,6 +65,8 @@ public class HttpProxy {
     private void restForRequest() {
         if (lastestRequestTime > 0) {
             if (System.currentTimeMillis() - lastestRequestTime > requestDuration) {
+                sleep(requestDuration);
+            } else {
                 sleep(System.currentTimeMillis() - lastestRequestTime);
             }
         }
@@ -146,7 +148,9 @@ public class HttpProxy {
 
     private static void sleep(long time) {
         try {
-            Thread.sleep(time);
+            if (time > 0) {
+                Thread.sleep(time);
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
