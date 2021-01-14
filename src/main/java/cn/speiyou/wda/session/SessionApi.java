@@ -60,6 +60,18 @@ public class SessionApi extends BaseApi {
     }
 
     /**
+     * 关闭某app
+     * @param sessionId
+     * @param bundleId
+     * @return
+     */
+    public BaseResponse<Boolean> terminateApp(String sessionId, String bundleId) {
+        AppParam param = new AppParam();
+        param.setBundleId(bundleId);
+        return post(getBaseUrlWithSession(sessionId) + "/wda/apps/terminate", param, null);
+    }
+
+    /**
      * 健康检查
      * wda会按一次物理键（圆形Home键）
      */
