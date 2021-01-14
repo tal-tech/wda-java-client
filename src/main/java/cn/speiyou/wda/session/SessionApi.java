@@ -33,42 +33,41 @@ public class SessionApi extends BaseApi {
      * 启动应用
      * @param bundleId 应用包id
      */
-    public BaseResponse launchApp(String sessionId, String bundleId) {
+    public BaseResponse launchApp(String bundleId) {
         AppParam param = new AppParam();
         param.setBundleId(bundleId);
-        return post(getBaseUrlWithSession(sessionId) + "/wda/apps/launch", param, null);
+        return postWithSession("/wda/apps/launch", param, null);
     }
 
     /**
      * 启动应用
      * @param bundleId 应用包id
      */
-    public BaseResponse<Integer> getAppState(String sessionId, String bundleId) {
+    public BaseResponse<Integer> getAppState(String bundleId) {
         AppParam param = new AppParam();
         param.setBundleId(bundleId);
-        return post(getBaseUrlWithSession(sessionId) + "/wda/apps/state", param, null);
+        return postWithSession("/wda/apps/state", param, null);
     }
 
     /**
      * 激活应用
      * @param bundleId 应用包id
      */
-    public BaseResponse activateApp(String sessionId, String bundleId) {
+    public BaseResponse activateApp(String bundleId) {
         AppParam param = new AppParam();
         param.setBundleId(bundleId);
-        return post(getBaseUrlWithSession(sessionId) + "/wda/apps/activate", param, null);
+        return postWithSession("/wda/apps/activate", param, null);
     }
 
     /**
      * 关闭某app
-     * @param sessionId
      * @param bundleId
      * @return
      */
-    public BaseResponse<Boolean> terminateApp(String sessionId, String bundleId) {
+    public BaseResponse<Boolean> terminateApp(String bundleId) {
         AppParam param = new AppParam();
         param.setBundleId(bundleId);
-        return post(getBaseUrlWithSession(sessionId) + "/wda/apps/terminate", param, null);
+        return postWithSession("/wda/apps/terminate", param, null);
     }
 
     /**

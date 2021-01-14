@@ -33,7 +33,11 @@ public class WDAClient {
     // 对话框操作API
     private AlertApi alertApi;
 
+    // http请求代理
     private HttpProxy httpProxy;
+
+    // 当前请求的SessionId
+    private String currentSessionId;
 
     public WDAClient(String host, int port) {
         this.host = host;
@@ -122,5 +126,13 @@ public class WDAClient {
 
     public HttpProxy getHttpProxy() {
         return httpProxy;
+    }
+
+    public String getCurrentSessionId() {
+        return currentSessionId;
+    }
+
+    public void setCurrentSessionId(String currentSessionId) {
+        this.currentSessionId = currentSessionId;
     }
 }

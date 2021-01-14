@@ -25,20 +25,19 @@ public class FindElementApi extends BaseApi {
      * @param queryInfo
      * @return
      */
-    public BaseResponse<List<Element>> elements(String sessionId, QueryInfo queryInfo) {
-        return post(getBaseUrlWithSession(sessionId) + "/elements",
+    public BaseResponse<List<Element>> elements(QueryInfo queryInfo) {
+        return postWithSession("/elements",
                 queryInfo, new TypeReference<BaseResponse<List<Element>>>(){});
     }
 
     /**
      * 查找某个元素下的符合某条件的控件
-     * @param sessionId
      * @param parentElementUUID
      * @param queryInfo
      * @return
      */
-    public BaseResponse<List<Element>> elements(String sessionId, String parentElementUUID, QueryInfo queryInfo) {
-        return post(getBaseUrlWithSessionAndUUID(sessionId, parentElementUUID) + "/elements",
+    public BaseResponse<List<Element>> elements(String parentElementUUID, QueryInfo queryInfo) {
+        return postWithSession(getPathWithUUID(parentElementUUID) + "/elements",
                 queryInfo, new TypeReference<BaseResponse<List<Element>>>(){});
     }
 

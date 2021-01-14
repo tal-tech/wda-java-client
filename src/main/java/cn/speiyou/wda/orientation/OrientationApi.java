@@ -23,7 +23,7 @@ public class OrientationApi extends BaseApi {
      * @param sessionId
      * @return
      */
-    public BaseResponse<String> getOrientation(String sessionId) {
-        return get(getBaseUrlWithSession(sessionId) + "/orientation", null);
+    public BaseResponse<String> getOrientation() {
+        return getWithSession("/orientation", null);
     }
 }

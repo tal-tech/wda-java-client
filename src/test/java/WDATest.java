@@ -22,7 +22,6 @@ import java.util.List;
 public class WDATest {
 
     private WDAClient client;
-    private String currentSessionId = "D04B7432-2089-44D7-8EBA-9C605A10030E";;
     private String appleMapPkg = "com.apple.Maps";
     private String targetElementUUID = "27000000-0000-0000-D303-000000000000";
 
@@ -50,7 +49,6 @@ public class WDATest {
     public void createSession() {
         BaseResponse<CreateSession> res = this.client.getSessionApi().createSession();
         if (res.isSuccess()) {
-            currentSessionId = res.getValue().getSessionId();
             assert StringUtils.isNotEmpty(res.getValue().getSessionId());
             System.out.println("创建Session成功：" + res.getValue().getSessionId());
         }
@@ -59,13 +57,13 @@ public class WDATest {
 
     @Test
     public void launchApp() {
-        BaseResponse res = this.client.getSessionApi().launchApp(currentSessionId, appleMapPkg);
+        BaseResponse res = this.client.getSessionApi().launchApp(appleMapPkg);
         assert res.isSuccess();
     }
 
     @Test
     public void getAppState() {
-        BaseResponse<Integer> res = this.client.getSessionApi().getAppState(currentSessionId, appleMapPkg);
+        BaseResponse<Integer> res = this.client.getSessionApi().getAppState(appleMapPkg);
         assert res.getValue() == 4;
     }
 
@@ -81,7 +79,7 @@ public class WDATest {
         QueryInfo queryInfo = new QueryInfo();
         queryInfo.setUsing(QueryUsing.CLASS_NAME);
         queryInfo.setValue("XCUIElementTypeStaticText");
-        BaseResponse<List<Element>> res = this.client.getFindElementApi().elements(currentSessionId, queryInfo);
+        BaseResponse<List<Element>> res = this.client.getFindElementApi().elements(queryInfo);
         System.out.println("查找到元素：" + JSON.toJSONString(res));
         assert res.isSuccess();
     }
@@ -91,21 +89,21 @@ public class WDATest {
         QueryInfo queryInfo = new QueryInfo();
         queryInfo.setUsing(QueryUsing.CLASS_NAME);
         queryInfo.setValue("XCUIElementTypeStaticText");
-        BaseResponse<List<Element>> res = this.client.getFindElementApi().elements(currentSessionId, targetElementUUID, queryInfo);
+        BaseResponse<List<Element>> res = this.client.getFindElementApi().elements(targetElementUUID, queryInfo);
         System.out.println("查找到元素：" + JSON.toJSONString(res));
         assert res.isSuccess();
     }
 
     @Test
     public void getOrientation() {
-        BaseResponse<String> res = this.client.getOrientationApi().getOrientation(currentSessionId);
+        BaseResponse<String> res = this.client.getOrientationApi().getOrientation();
         System.out.println(JSON.toJSONString(res));
         assert res.isSuccess();
     }
 
     @Test
     public void deactiveApp() {
-        BaseResponse res = this.client.getCustomApi().deactiveApp(currentSessionId);
+        BaseResponse res = this.client.getCustomApi().deactiveApp();
         System.out.println(JSON.toJSONString(res));
         assert res.isSuccess();
     }
@@ -154,56 +152,56 @@ public class WDATest {
 
     @Test
     public void getWindowSize() {
-        BaseResponse<WindowSize> res = this.client.getElementApi().getWindowSize(currentSessionId);
+        BaseResponse<WindowSize> res = this.client.getElementApi().getWindowSize();
         System.out.println(JSON.toJSONString(res));
         assert res.isSuccess();
     }
 
     @Test
     public void elementEnabled() {
-        BaseResponse<Boolean> res = this.client.getElementApi().enabled(currentSessionId, targetElementUUID);
+        BaseResponse<Boolean> res = this.client.getElementApi().enabled(targetElementUUID);
         System.out.println(JSON.toJSONString(res));
         assert res.isSuccess();
     }
 
     @Test
     public void elementRect() {
-        BaseResponse<WDARect> res = this.client.getElementApi().rect(currentSessionId, targetElementUUID);
+        BaseResponse<WDARect> res = this.client.getElementApi().rect(targetElementUUID);
         System.out.println(JSON.toJSONString(res));
         assert res.isSuccess();
     }
 
     @Test
     public void elementText() {
-        BaseResponse<String> res = this.client.getElementApi().text(currentSessionId, targetElementUUID);
+        BaseResponse<String> res = this.client.getElementApi().text(targetElementUUID);
         System.out.println(JSON.toJSONString(res));
         assert res.isSuccess();
     }
 
     @Test
     public void elementDisplayed() {
-        BaseResponse<Boolean> res = this.client.getElementApi().displayed(currentSessionId, targetElementUUID);
+        BaseResponse<Boolean> res = this.client.getElementApi().displayed(targetElementUUID);
         System.out.println(JSON.toJSONString(res));
         assert res.isSuccess();
     }
 
     @Test
     public void elementSelected() {
-        BaseResponse<Boolean> res = this.client.getElementApi().selected(currentSessionId, targetElementUUID);
+        BaseResponse<Boolean> res = this.client.getElementApi().selected(targetElementUUID);
         System.out.println(JSON.toJSONString(res));
         assert res.isSuccess();
     }
 
     @Test
     public void elementName() {
-        BaseResponse<String> res = this.client.getElementApi().name(currentSessionId, targetElementUUID);
+        BaseResponse<String> res = this.client.getElementApi().name(targetElementUUID);
         System.out.println(JSON.toJSONString(res));
         assert res.isSuccess();
     }
 
     @Test
     public void getAlertButtons() {
-        BaseResponse<List<String>> res = this.client.getAlertApi().getAlertButtons(currentSessionId);
+        BaseResponse<List<String>> res = this.client.getAlertApi().getAlertButtons();
         System.out.println(JSON.toJSONString(res));
         assert res.isSuccess();
     }

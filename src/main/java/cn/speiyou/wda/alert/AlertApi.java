@@ -28,32 +28,29 @@ public class AlertApi extends BaseApi {
 
     /**
      * 获取alert对话框的按钮
-     * @param sessionId
      * @return
      */
-    public BaseResponse<List<String>> getAlertButtons(String sessionId) {
-        return get(getBaseUrlWithSession(sessionId) + "/wda/alert/buttons",
+    public BaseResponse<List<String>> getAlertButtons() {
+        return getWithSession("/wda/alert/buttons",
                 new TypeReference<BaseResponse<List<String>>>(){});
     }
 
     /**
      * 隐藏alert对话框
-     * @param sessionId
      * @return
      */
-    public BaseResponse dismiss(String sessionId) {
-        return post(getBaseUrlWithSession(sessionId) + "/alert/dismiss", null, null);
+    public BaseResponse dismiss() {
+        return postWithSession("/alert/dismiss", null, null);
     }
 
     /**
      * 点击某个按钮，隐藏对话框
-     * @param sessionId
      * @param name
      * @return
      */
-    public BaseResponse accept(String sessionId, String name) {
+    public BaseResponse accept(String name) {
         JSONObject obj = new JSONObject();
         obj.put("name", name);
-        return post(getBaseUrlWithSession(sessionId) + "/alert/accept", obj, null);
+        return postWithSession("/alert/accept", obj, null);
     }
 }

@@ -19,11 +19,10 @@ public class CustomApi extends BaseApi {
 
     /**
      * 重启当前应用
-     * @param session
      * @return
      */
-    public BaseResponse deactiveApp(String session) {
-        return post(getBaseUrlWithSession(session) + "/wda/deactivateApp", null, null);
+    public BaseResponse deactiveApp() {
+        return postWithSession("/wda/deactivateApp", null, null);
     }
 
     /**
