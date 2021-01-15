@@ -12,9 +12,11 @@ import org.apache.commons.lang3.StringUtils;
 public class BaseApi {
 
     protected WDAClient wda;
+    private String tag;
 
     public BaseApi(WDAClient client) {
         this.wda = client;
+        this.tag = getClass().getSimpleName();
     }
 
     public String getBaseUrl() {
@@ -67,7 +69,7 @@ public class BaseApi {
      * @param <T>
      * @return
      */
-    public <T> BaseResponse<T> getWithSession(String path, TypeReference<BaseResponse<T>> typeReference) {
+    public synchronized <T> BaseResponse<T> getWithSession(String path, TypeReference<BaseResponse<T>> typeReference) {
         String sessionId = getSessionId(false);
         BaseResponse<T> res = get(getBaseUrlWithSession(sessionId) + path, typeReference);
         if (!res.isSuccess() && "invalid session id".equals(res.getErr().getError())) {
@@ -85,11 +87,13 @@ public class BaseApi {
      * @param <T>
      * @return
      */
-    public <T> BaseResponse<T> postWithSession(String path, Object obj, TypeReference<BaseResponse<T>> typeReference) {
+    public synchronized <T> BaseResponse<T> postWithSession(String path, Object obj, TypeReference<BaseResponse<T>> typeReference) {
         String sessionId = getSessionId(false);
         BaseResponse<T> res = post(getBaseUrlWithSession(sessionId) + path, obj, typeReference);
         if (!res.isSuccess() && "invalid session id".equals(res.getErr().getError())) {
+            wda.logInfo(tag, String.format("当前Session[%s]失效了，重新申请", sessionId));
             sessionId = getSessionId(true);
+            wda.logInfo(tag, "重新申请的SessionId为：" + sessionId);
             return post(getBaseUrlWithSession(sessionId) + path, obj, typeReference);
         }
         return res;

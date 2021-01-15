@@ -39,6 +39,9 @@ public class WDAClient {
     // 当前请求的SessionId
     private String currentSessionId;
 
+    // 日志接口
+    private ILog log;
+
     public WDAClient(String host, int port) {
         this.host = host;
         this.port = port;
@@ -135,4 +138,25 @@ public class WDAClient {
     public void setCurrentSessionId(String currentSessionId) {
         this.currentSessionId = currentSessionId;
     }
+
+    public ILog getLog() {
+        return log;
+    }
+
+    public void setLog(ILog log) {
+        this.log = log;
+    }
+
+    public void logInfo(String tag, String info) {
+        if (log != null) {
+            log.logInfo(tag, info);
+        }
+    }
+
+    public void logError(String tag, String error, Throwable throwable) {
+        if (log != null) {
+            log.logError(tag, error, throwable);
+        }
+    }
+
 }
