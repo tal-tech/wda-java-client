@@ -186,11 +186,10 @@ public class ElementApi extends BaseApi {
 
     /**
      * 在屏幕上拖动
-     * @param sessionId
      * @param param
      * @return
      */
-    public BaseResponse dragFromToForDurationInCoordinate(String sessionId, FromToParam param) {
+    public BaseResponse dragFromToForDurationInCoordinate(FromToParam param) {
         return postWithSession("/wda/dragfromtoforduration", param, null);
     }
 
@@ -331,18 +330,17 @@ public class ElementApi extends BaseApi {
      * x	坐标x值	100	double
      * y	坐标y值	200	double
      * duration	长按时间，单位秒	0.5	double
-     * @param sessionId
      * @param x
      * @param y
      * @param duration
      * @return
      */
-    public BaseResponse touchAndHoldInCoordinate(String sessionId, int x, int y, int duration) {
+    public BaseResponse touchAndHoldInCoordinate(int x, int y, int duration) {
         JSONObject json = new JSONObject();
         json.put("x", x);
         json.put("y", y);
         json.put("duration", duration);
-        return post(getBaseUrlWithSession(sessionId) + "/wda/touchAndHold", duration, null);
+        return postWithSession("/wda/touchAndHold", json, null);
     }
 
     /**

@@ -2,7 +2,6 @@ package cn.speiyou.wda;
 
 import cn.speiyou.wda.session.res.CreateSession;
 import com.alibaba.fastjson.TypeReference;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -73,8 +72,14 @@ public class BaseApi {
         String sessionId = getSessionId(false);
         BaseResponse<T> res = get(getBaseUrlWithSession(sessionId) + path, typeReference);
         if (!res.isSuccess() && "invalid session id".equals(res.getErr().getError())) {
+            wda.logInfo(tag, String.format("请求：%s，Session[%s]失效了，重新申请", path, sessionId));
             sessionId = getSessionId(true);
-            return get(getBaseUrlWithSession(sessionId) + path, typeReference);
+            wda.logInfo(tag, "重新申请的SessionId为：" + sessionId);
+            res = get(getBaseUrlWithSession(sessionId) + path, typeReference);
+            if (!res.isSuccess()) {
+                wda.logInfo(tag, String.format("请求：%s，Session[%s]仍然失败，请检查bug", path, sessionId));
+            }
+            return res;
         }
         return res;
     }
@@ -91,10 +96,14 @@ public class BaseApi {
         String sessionId = getSessionId(false);
         BaseResponse<T> res = post(getBaseUrlWithSession(sessionId) + path, obj, typeReference);
         if (!res.isSuccess() && "invalid session id".equals(res.getErr().getError())) {
-            wda.logInfo(tag, String.format("当前Session[%s]失效了，重新申请", sessionId));
+            wda.logInfo(tag, String.format("请求：%s，Session[%s]失效了，重新申请", path, sessionId));
             sessionId = getSessionId(true);
             wda.logInfo(tag, "重新申请的SessionId为：" + sessionId);
-            return post(getBaseUrlWithSession(sessionId) + path, obj, typeReference);
+            res = post(getBaseUrlWithSession(sessionId) + path, obj, typeReference);
+            if (!res.isSuccess()) {
+                wda.logInfo(tag, String.format("请求：%s，Session[%s]仍然失败，请检查bug", path, sessionId));
+            }
+            return res;
         }
         return res;
     }
